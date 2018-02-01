@@ -1,8 +1,10 @@
+import typescript from 'rollup-plugin-typescript2';
+import uglify from 'rollup-plugin-uglify';
 const pkg = require('./package.json');
 const external = [...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)];
 
 export default {
-  entry: 'dist/temp/index.js',
+  entry: 'src/index.ts',
   globals: {
     angular: 'angular',
     'angular-mocks': 'angular-mocks',
@@ -10,7 +12,13 @@ export default {
     tslib: 'tslib'
   },
   external,
-  plugins: [],
+  plugins: [
+    typescript({
+      typescript: require('typescript'),
+      useTsconfigDeclarationDir: true
+    }),
+    uglify()
+  ],
   targets: [
     {
       dest: 'dist/' + pkg.main,

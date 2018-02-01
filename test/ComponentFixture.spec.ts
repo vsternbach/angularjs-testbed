@@ -1,8 +1,6 @@
-import { camelToKebab, ComponentFixture, DebugElement } from '../src/';
+import { ComponentFixture, DebugElement } from '../src/';
 import * as angular from 'angular';
 import 'angular-mocks';
-import { element } from 'angular';
-// import { platformBrowserDynamic } from 'angular-ts-decorators';
 
 describe('ComponentFixture', () => {
   const el: DebugElement = angular.element('body') as DebugElement;
