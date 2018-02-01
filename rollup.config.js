@@ -17,7 +17,7 @@ export default {
       typescript: require('typescript'),
       useTsconfigDeclarationDir: true
     }),
-    uglify()
+    // uglify()
   ],
   targets: [
     {
