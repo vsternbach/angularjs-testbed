@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/vsternbach/angularjs-testbed/compare/v0.1.5...v0.2.0) (2018-04-13)
+
+
+### Features
+
+* **build:** add TestBed class ([0cdf891](https://github.com/vsternbach/angularjs-testbed/commit/0cdf891))
+
+
+
 <a name="0.1.5"></a>
 ## [0.1.5](https://github.com/vsternbach/angularjs-testbed/compare/v0.1.4...v0.1.5) (2018-02-01)
 
