@@ -1,10 +1,13 @@
 import * as angular from 'angular';
 import 'angular-mocks';
-import { NgModule, ModuleConfig, Provider, Type, getTypeName } from 'angular-ts-decorators';
+import { getTypeName, ModuleConfig, NgModule, Provider, Type } from 'angular-ts-decorators';
 import { ComponentFixture } from './ComponentFixture';
+
+let _testBed: TestBed = null;
 
 /** @internal */
 export const DynamicTestModuleId = 'DynamicTestModule';
+// let _nextRootElementId = 0;
 
 /**
  * @whatItDoes Configures and initializes environment for unit testing and provides methods for
@@ -14,25 +17,20 @@ export const DynamicTestModuleId = 'DynamicTestModule';
  * TestBed is the primary api for writing unit tests for Angular applications and libraries.
  *
  * @stable
+ * @internal
  */
 export class TestBed {
-  /** @internal */
-  private _providers: Array<Provider> = [];
-  /** @internal */
-  private _declarations: Array<Type<any>|Array<any>|any> = [];
-  /** @internal */
-  private _imports: Array<Type<any>|Array<any>|any> = [];
-  /** @internal */
+  private _providers: Provider[] = [];
+  private _declarations: Array<Type<any>|any[]|any> = [];
+  private _imports: Array<Type<any>|any[]|any> = [];
   private _activeFixtures: Array<ComponentFixture<any>> = [];
-  /** @internal */
-  private _moduleRef: ng.IModule = null !;
-  /** @internal */
-  private _instantiated: boolean = false;
+  private _moduleRef: ng.IModule = null;
+  private _instantiated = false;
   /**
    * Allows overriding default providers, directives, pipes, modules of the test injector,
    * which are defined in test_injector.js
    */
-  static configureTestingModule(moduleDef: ModuleConfig): typeof TestBed {
+  public static configureTestingModule(moduleDef: ModuleConfig): typeof TestBed {
     getTestBed().configureTestingModule(moduleDef);
     return TestBed;
   }
@@ -42,12 +40,11 @@ export class TestBed {
     return TestBed;
   }
 
-  static createComponent<T>(component: Type<T>): ComponentFixture<T> {
+  public static createComponent<T>(component: Type<T>): ComponentFixture<T> {
     return getTestBed().createComponent(component);
   }
 
-  /** @internal */
-  configureTestingModule(moduleDef: ModuleConfig) {
+  public configureTestingModule(moduleDef: ModuleConfig) {
     if (moduleDef.providers) {
       this._providers.push(...moduleDef.providers);
     }
@@ -59,9 +56,8 @@ export class TestBed {
     }
   }
 
-  /** @internal */
   resetTestingModule() {
-    this._moduleRef = null !;
+    this._moduleRef = null;
     this._providers = [];
     this._declarations = [];
     this._imports = [];
@@ -76,11 +72,19 @@ export class TestBed {
     this._activeFixtures = [];
   }
 
-  /** @internal */
-  createComponent<T>(component: Type<T>): ComponentFixture<T> {
+  public createComponent<T>(component: Type<T>): ComponentFixture<T> {
     this._initIfNeeded();
+    // const componentFactory = null; // this._compiler.getComponentFactory(component);
+    //
+    // if (!componentFactory) {
+    //   throw new Error(
+    //     `Cannot create the component ${component['name']} as it was not imported into the testing module!`);
+    // }
+    // const rootElId = `root${_nextRootElementId++}`;
+    // testComponentRenderer.insertRootElement(rootElId);
 
     const initComponent = () => {
+      // const componentRef = componentFactory.create(null, [], `#${rootElId}`, this._moduleRef);
       const componentRef = this._compileComponent(component);
       return new ComponentFixture<T>(componentRef);
     };
@@ -90,7 +94,6 @@ export class TestBed {
     return fixture;
   }
 
-  /** @internal */
   private _initIfNeeded() {
     if (this._instantiated) {
       return;
@@ -99,8 +102,10 @@ export class TestBed {
     this._instantiated = true;
   }
 
-  /** @internal */
   private _createModule(): Type<any> {
+    // const providers = this._providers.concat([{provide: TestBed, useValue: this}]);
+    // const declarations = [...this._declarations];
+    // const imports = [this.ngModule, this._imports];
     const providers = this._providers;
     const declarations = this._declarations;
     const imports = this._imports;
@@ -112,31 +117,24 @@ export class TestBed {
     return DynamicTestModule;
   }
 
-  /** @internal */
-  private _compileComponent(component: Type<any>) {
+  private _compileComponent(component: Type<any>): JQLite {
     const componentName = getTypeName(component);
     const selector = camelToKebab(componentName);
     const $div = `<${selector}></${selector}>`;
-    let element: JQLite = null !;
+    let element: JQLite = null;
     inject(($compile: ng.ICompileService, $rootScope: ng.IRootScopeService) => {
       const $scope = $rootScope.$new();
-      element = $compile(angular.element($div))($scope);
+      element = $compile($div)($scope);
     });
     return element;
   }
 }
 
 /** @internal */
-function getTestBed() {
+export function getTestBed() {
   return _testBed = _testBed || new TestBed();
 }
 
-// if this syntax looks strange to you, check this out:
-// https://github.com/Microsoft/TypeScript/wiki/What's-new-in-TypeScript#user-content-non-null-assertion-operator
-/** @internal */
-let _testBed: TestBed = null !;
-
-/** @internal */
 function camelToKebab(str: string) {
   return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }

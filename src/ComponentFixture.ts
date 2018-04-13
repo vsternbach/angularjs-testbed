@@ -1,21 +1,11 @@
-import { element } from 'angular';
-/**
- * Extend JQLite with query method (will work only if JQuery included)
- */
-element.prototype.query = element.prototype.find;
-/**
- * Extend JQLite with nativeElement property
- */
-Object.defineProperty(element.prototype, 'nativeElement', {
-  get() { return this[0]; },
-  configurable: false
-});
+import { IScope } from 'angular';
+import { DebugElement } from './DebugElement';
 
-export interface DebugElement extends JQLite {
-  nativeElement: HTMLElement;
-  query(selector: string): DebugElement;
+/** @internal */
+interface ComponentScope<T = any> extends IScope {
+  $ctrl: T;
 }
-
+/** @internal */
 export class ComponentFixture<T> {
   /**
    * The DebugElement associated with the root element of this component.
@@ -31,12 +21,12 @@ export class ComponentFixture<T> {
    * The native element at the root of the component.
    */
   nativeElement: HTMLElement;
-  /** @internal */
-  private _isDestroyed: boolean = false;
+
+  private _isDestroyed = false;
 
   constructor(private element: JQLite) {
-    this.componentInstance = element.isolateScope<any>()['$ctrl'];
-    this.debugElement = element as DebugElement;
+    this.componentInstance = element.isolateScope<ComponentScope>().$ctrl;
+    this.debugElement = new DebugElement(element);
     this.nativeElement = this.debugElement.nativeElement;
   }
   /**
@@ -56,5 +46,3 @@ export class ComponentFixture<T> {
     }
   }
 }
-
-

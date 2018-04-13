@@ -28,16 +28,17 @@
   "jsnext:main": "angularjs-testbed.js",
   "types": "types/index.d.ts",
   "dependencies": {
-    "angular-ts-decorators": "3.0.5",
     "tslib": "^1.7.1"
   },
   "devDependencies": {
     "@types/angular": "^1.6.24",
     "@types/angular-mocks": "^1.5.11",
     "@types/jasmine": "^2.5.43",
+    "@types/jquery": "^3.3.1",
     "@types/node": "^8.5.2",
     "angular": "^1.6.0",
     "angular-mocks": "^1.6.3",
+    "angular-ts-decorators": "^3.4.1",
     "copyfiles": "^1.2.0",
     "coveralls": "^2.13.0",
     "jasmine-core": "^2.5.2",
@@ -58,7 +59,8 @@
   },
   "peerDependencies": {
     "angular": ">=1.5.0",
-    "angular-mocks": ">=1.5.0"
+    "angular-mocks": ">=1.5.0",
+    "jquery": ">=3.2.1"
   },
   "scripts": {
     "clean": "rimraf dist coverage",
