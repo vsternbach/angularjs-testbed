@@ -5,7 +5,7 @@ import { DebugElement } from './DebugElement';
 interface ComponentScope<T = any> extends IScope {
   $ctrl: T;
 }
-/** @internal */
+
 export class ComponentFixture<T> {
   /**
    * The DebugElement associated with the root element of this component.

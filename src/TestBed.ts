@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 import 'angular-mocks';
-import { getTypeName, ModuleConfig, NgModule, Provider, Type } from 'angular-ts-decorators';
+import { camelToKebab, getTypeName, ModuleConfig, NgModule, Provider, Type } from 'angular-ts-decorators';
 import { ComponentFixture } from './ComponentFixture';
 
 let _testBed: TestBed = null;
@@ -15,9 +15,6 @@ export const DynamicTestModuleId = 'DynamicTestModule';
  * @description
  *
  * TestBed is the primary api for writing unit tests for Angular applications and libraries.
- *
- * @stable
- * @internal
  */
 export class TestBed {
   private _providers: Provider[] = [];
@@ -130,11 +127,6 @@ export class TestBed {
   }
 }
 
-/** @internal */
 export function getTestBed() {
   return _testBed = _testBed || new TestBed();
-}
-
-function camelToKebab(str: string) {
-  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
