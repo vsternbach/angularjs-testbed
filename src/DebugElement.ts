@@ -12,7 +12,6 @@ export class DebugElement {
   }
 }
 
-/** @internal */
 export interface DebugElement extends JQLite {
   nativeElement: HTMLElement;
   query(selector: JQuery.Selector | Element | JQuery): DebugElement;
