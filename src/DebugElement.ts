@@ -1,9 +1,9 @@
-import * as $ from 'jquery';
+import { element } from 'angular';
 
 /** @internal */
 export class DebugElement {
   constructor(selector: JQuery.Selector | Element | JQuery) {
-    const de = $(selector) as DebugElement;
+    const de = element(selector) as DebugElement;
     de.query = DebugElement.query;
     de.nativeElement = de[0];
     return de;
