@@ -1,5 +1,6 @@
 import * as angular from 'angular';
 import 'angular-mocks';
+import { IMockStatic } from 'angular';
 import { camelToKebab, getTypeName, ModuleConfig, NgModule, Provider, Type } from 'angular-ts-decorators';
 import { ComponentFixture } from './ComponentFixture';
 
@@ -21,7 +22,7 @@ export class TestBed {
   private _declarations: Array<Type<any>|any[]|any> = [];
   private _imports: Array<Type<any>|any[]|any> = [];
   private _activeFixtures: Array<ComponentFixture<any>> = [];
-  private _moduleRef: ng.IModule = null;
+  private _moduleRef: IMockStatic['module'] = null;
   private _instantiated = false;
   /**
    * Allows overriding default providers, directives, pipes, modules of the test injector,
@@ -37,11 +38,30 @@ export class TestBed {
     return TestBed;
   }
 
-  public static createComponent<T>(component: Type<T>): ComponentFixture<T> {
+  static compileComponents() { return getTestBed().compileComponents(); }
+
+  static createComponent<T>(component: Type<T>): ComponentFixture<T> {
     return getTestBed().createComponent(component);
   }
 
-  public configureTestingModule(moduleDef: ModuleConfig) {
+  static get(token: any) {
+    token = typeof token === 'string' ? token : getTypeName(token);
+    return getTestBed().get(token);
+  }
+
+  get(token: any) {
+    this._initIfNeeded();
+    if (token === TestBed) {
+      return this;
+    }
+    let result: any = null;
+    angular.mock.inject([`${token}`, (token: any) => {
+      result = token
+    }]);
+    return result;
+  }
+
+  configureTestingModule(moduleDef: ModuleConfig) {
     if (moduleDef.providers) {
       this._providers.push(...moduleDef.providers);
     }
@@ -69,7 +89,11 @@ export class TestBed {
     this._activeFixtures = [];
   }
 
-  public createComponent<T>(component: Type<T>): ComponentFixture<T> {
+  compileComponents() {
+    this._initIfNeeded();
+  }
+
+  createComponent<T>(component: Type<T>): ComponentFixture<T> {
     this._initIfNeeded();
     // const componentFactory = null; // this._compiler.getComponentFactory(component);
     //
@@ -95,11 +119,11 @@ export class TestBed {
     if (this._instantiated) {
       return;
     }
-    this._createModule();
+    this._moduleRef = this._createModule();
     this._instantiated = true;
   }
 
-  private _createModule(): Type<any> {
+  private _createModule(): any {
     // const providers = this._providers.concat([{provide: TestBed, useValue: this}]);
     // const declarations = [...this._declarations];
     // const imports = [this.ngModule, this._imports];
@@ -110,8 +134,7 @@ export class TestBed {
     @NgModule({ id: DynamicTestModuleId, providers, declarations, imports })
     class DynamicTestModule {}
 
-    angular.mock.module(DynamicTestModuleId);
-    return DynamicTestModule;
+    return angular.mock.module(DynamicTestModuleId);
   }
 
   private _compileComponent(component: Type<any>): JQLite {
@@ -119,7 +142,7 @@ export class TestBed {
     const selector = camelToKebab(componentName);
     const $div = `<${selector}></${selector}>`;
     let element: JQLite = null;
-    inject(($compile: ng.ICompileService, $rootScope: ng.IRootScopeService) => {
+    angular.mock.inject(($compile: ng.ICompileService, $rootScope: ng.IRootScopeService) => {
       const $scope = $rootScope.$new();
       element = $compile($div)($scope);
     });
