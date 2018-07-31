@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/vsternbach/angularjs-testbed/compare/v0.3.0...v0.3.1) (2018-07-31)
+
+
+### Bug Fixes
+
+* **build:** remove jquery as peerDep and add [@types](https://github.com/types)/jquery ([8c4fd8f](https://github.com/vsternbach/angularjs-testbed/commit/8c4fd8f)), closes [#1](https://github.com/vsternbach/angularjs-testbed/issues/1)
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/vsternbach/angularjs-testbed/compare/v0.2.5...v0.3.0) (2018-04-19)
 
