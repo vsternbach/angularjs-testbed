@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/vsternbach/angularjs-testbed/compare/v0.3.1...v0.3.2) (2018-08-02)
+
+
+### Bug Fixes
+
+* **test:** add jquery as devDependency ([095496b](https://github.com/vsternbach/angularjs-testbed/commit/095496b))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/vsternbach/angularjs-testbed/compare/v0.3.0...v0.3.1) (2018-07-31)
 
