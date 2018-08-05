@@ -1,10 +1,4 @@
-import { IScope } from 'angular';
 import { DebugElement } from './DebugElement';
-
-/** @internal */
-interface ComponentScope<T = any> extends IScope {
-  $ctrl: T;
-}
 
 export class ComponentFixture<T> {
   /**
@@ -25,7 +19,7 @@ export class ComponentFixture<T> {
   private _isDestroyed = false;
 
   constructor(private element: JQLite) {
-    this.componentInstance = element.isolateScope<ComponentScope>().$ctrl;
+    this.componentInstance = element.controller((element as any).componentName); // componentName is attached to element in TestBed  _compileComponent method
     this.debugElement = new DebugElement(element);
     this.nativeElement = this.debugElement.nativeElement;
   }

@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import 'angular-mocks';
 import { IMockStatic } from 'angular';
-import { camelToKebab, getTypeName, ModuleConfig, NgModule, Provider, Type } from 'angular-ts-decorators';
+import { camelToKebab, getTypeName, kebabToCamel, ModuleConfig, NgModule, Provider, Type } from 'angular-ts-decorators';
 import { ComponentFixture } from './ComponentFixture';
 
 let _testBed: TestBed = null;
@@ -146,6 +146,7 @@ export class TestBed {
       const $scope = $rootScope.$new();
       element = $compile($div)($scope);
     });
+    (element as any).componentName = kebabToCamel(componentName);
     return element;
   }
 }
