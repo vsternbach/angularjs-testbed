@@ -1,4 +1,7 @@
 # angularjs-testbed
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/vsternbach/angularjs-testbed.svg)](https://greenkeeper.io/)
+
 Testing abstraction library inspired by [@angular/core/testing](https://angular.io/api/core/testing) for angularjs projects written in typescript with decorators
 
 ## Documentation
