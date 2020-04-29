@@ -47,7 +47,7 @@
     "karma-jasmine": "^1.1.2",
     "karma-typescript": "^3.0.13",
     "rimraf": "^2.6.1",
-    "rollup": "^0.64.1",
+    "rollup": "^2.7.4",
     "rollup-plugin-typescript2": "^0.16.1",
     "rollup-plugin-uglify": "^4.0.0",
     "standard-version": "^4.4.0",
