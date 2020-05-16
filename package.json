@@ -72,7 +72,6 @@
     "build": "npm run clean && rollup -c && copyfiles package.json README.md CHANGELOG.md LICENSE dist/",
     "uglify": "for f in dist/*.js; do ./node_modules/uglify-es/bin/uglifyjs $f --compress drop_console --mangle --output ${f%.js}.min.js; done",
     "release": "standard-version",
-    "postinstall": "npm install && npm run build",
     "postrelease": "git push origin master --follow-tags"
   }
 }
