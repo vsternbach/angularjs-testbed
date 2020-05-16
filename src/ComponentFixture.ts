@@ -1,4 +1,5 @@
 import { DebugElement } from './DebugElement';
+import * as angular from 'angular';
 
 export class ComponentFixture<T> {
   /**
@@ -9,7 +10,7 @@ export class ComponentFixture<T> {
   /**
    * The instance of the root component class.
    */
-  componentInstance: T;
+  componentInstance;
 
   /**
    * The native element at the root of the component.
@@ -19,15 +20,28 @@ export class ComponentFixture<T> {
   private _isDestroyed = false;
 
   constructor(private element: JQLite) {
-    this.componentInstance = element.controller((element as any).componentName); // componentName is attached to element in TestBed  _compileComponent method
-    this.debugElement = new DebugElement(element);
-    this.nativeElement = this.debugElement.nativeElement;
+    this.componentInstance = element;
   }
   /**
    * Trigger a change detection cycle for the component.
    */
   detectChanges(): void {
-    this.element.scope().$digest();
+    // this.element.scope().$digest();
+    this.componentInstance.$onInit();
+  }
+
+  detectChangesDOM($div, bindings): void {
+    var compile = null;
+
+    angular.mock.inject(function ($compile, $rootScope) {
+      var $scope = $rootScope.$new();
+      Object.assign($scope, bindings);
+      compile = $compile($div)($scope);
+      compile.scope().$digest();
+    });
+
+    this.debugElement = new DebugElement(compile);
+    this.nativeElement = this.debugElement.nativeElement;
   }
 
   /**
@@ -35,7 +49,8 @@ export class ComponentFixture<T> {
    */
   destroy(): void {
     if (!this._isDestroyed) {
-      this.element.detach();
+      // this.element.detach();
+      this.componentInstance.$onDestroy();
       this._isDestroyed = true;
     }
   }

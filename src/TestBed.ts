@@ -139,12 +139,15 @@ export class TestBed {
 
   private _compileComponent(component: Type<any>): JQLite {
     const componentName = getTypeName(component);
-    const selector = camelToKebab(componentName);
-    const $div = `<${selector}></${selector}>`;
+    // const selector = camelToKebab(componentName);
+    // const $div = `<${selector}></${selector}>`;
     let element: JQLite = null;
-    angular.mock.inject(($compile: ng.ICompileService, $rootScope: ng.IRootScopeService) => {
-      const $scope = $rootScope.$new();
-      element = $compile($div)($scope);
+    angular.mock.inject(function ($compile, $rootScope, $componentController) {
+      var $scope = $rootScope.$new();
+
+      element = $componentController(componentName, {
+        $scope: $scope,
+      });
     });
     (element as any).componentName = kebabToCamel(componentName);
     return element;
